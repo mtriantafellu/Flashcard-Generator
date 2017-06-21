@@ -31,11 +31,16 @@ var questionPrompt = [
 ]; // end question prompt
 
 function generateQuestion() {
-    fs.read('Questions.txt', 'utf8', function(error, data) {
+    fs.readFile('./Questions.txt', 'utf8', function(error, data) {
         if (error) {
-            return console.log(error);
+            console.log(error);
         }
-        console.log(questions[1]);
+        dataArr = data.split(', ');
+        console.log(dataArr);
+        JSON.stringify(dataArr);
+        console.log(dataArr);
+        result = "";
+        console.log(result[1].question);
     })
 }
 generateQuestion();
