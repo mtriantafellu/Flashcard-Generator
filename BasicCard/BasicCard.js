@@ -1,11 +1,13 @@
 
-var fs = require("fs");
+//var fs = require("fs");
 
-var questions = require('./Questions.txt');
+var questions = require('./Questions.js');
+     console.log(questions[0].question);
 
 var inquirer = require('inquirer');
 
 //three arguments 1. which side, 2. userInput, 3. AnotherQuestion?
+
 var questionPrompt = [
     {
         type: 'list',
@@ -30,27 +32,29 @@ var questionPrompt = [
     }
 ]; // end question prompt
 
+
 function generateQuestion() {
     fs.readFile('./Questions.txt', 'utf8', function(error, data) {
         if (error) {
             console.log(error);
         }
         dataArr = data.split(', ');
-        console.log(dataArr);
-        JSON.stringify(dataArr);
-        console.log(dataArr);
-        result = "";
-        console.log(result[1].question);
+            console.log(dataArr);
+            JSON.stringify(data);
+            console.log(data);
+        //result = "data";
+        console.log(data[1].question);
     })
 }
 generateQuestion();
+
 
 /*
 function main() {
     whichSide();
 }
 
-function askForInput () {
+function askForInput() {
     pleaseEnter();
 }
 
@@ -90,5 +94,5 @@ function anotherQuestion() {
 }
 
 main();
-*/
 
+*/
