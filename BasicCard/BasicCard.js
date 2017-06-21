@@ -1,25 +1,35 @@
 
-//var fs = require("fs");
+var fs = require("fs");
 
 var questions = require('./Questions.js');
-     console.log(questions[0].question);
+     //console.log(questions[0].question);
 
 var inquirer = require('inquirer');
 
 //three arguments 1. which side, 2. userInput, 3. AnotherQuestion?
 
+
+var generatedQuestionFront = ''
+var generatedQuestionBack = '';
+
 var questionPrompt = [
     {
         type: 'list',
+        name: 'welcome',
+        message: 'Welcome to the FlashCard App, would you like to begin with Basic Cards or Cloze Cards?',
+        choices: ['Basic', 'Cloze']
+    },
+    {
+        type: 'list',
         name: 'side',
-        message: 'Which side of the card would you like to view?',
+        message: 'Please see question below:',
         choices: ['Front', 'Back']
     },
     {
         type: 'input',
         name: 'userAnswerInput',
         message: 'Please enter your answer',
-        choices: ['Answer1'],
+        choices: [generatedQuestionBack],
         filter: function(val) {
             return val.toLowerCase();
         }
@@ -33,46 +43,55 @@ var questionPrompt = [
 ]; // end question prompt
 
 
-function generateQuestion() {
-    fs.readFile('./Questions.txt', 'utf8', function(error, data) {
-        if (error) {
-            console.log(error);
-        }
-        dataArr = data.split(', ');
-            console.log(dataArr);
-            JSON.stringify(data);
-            console.log(data);
-        //result = "data";
-        console.log(data[1].question);
-    })
-}
-generateQuestion();
-
-
-/*
 function main() {
-    whichSide();
+    welcome();
 }
 
-function askForInput() {
-    pleaseEnter();
-}
-
-function whichSide() {
+function welcome() {
     inquirer.prompt(questionPrompt[0]).then(function (answers) {
-        if (answers.side === 'Front') {
-            console.log('Question 1 Front');
-            askForInput();
+        if (answers.welcome === 'Basic') {
+            console.log('Front');
+            whichSide();
         } else if (answers.side === 'Back') {
-            console.log('Question 1 Back');
-            askForInput();
+            console.log('Back');
+            whichSide();
         }
     });
 }
 
+
+//function to generate the question pulling from Questions.js file
+function generateQuestion() {
+    fs.readFile('./Questions.txt', 'utf8', function(error, data) {
+        if (error) {
+            console.log(error);
+        } else {
+            generatedQuestionFront = console.log(questions[0].question);
+            generatedQuestionBack = console.log(questions[0].answer);
+            //console.log(questions[0].question)
+        }
+    })
+}
+
+function whichSide() {
+    inquirer.prompt(questionPrompt[1]).then(function (answers) {
+        if (answers.side === 'Front') {
+            generateQuestion();
+            //console.log(generatedQuestionFront);
+            pleaseEnter();
+
+        } else {
+            generateQuestion();
+            //console.log(generatedQuestionBack);
+            pleaseEnter();
+        }
+    });
+}
+
+
 function pleaseEnter() {
-    inquirer.prompt(questionPrompt[1]).then(function(answers) {
-        if (answers.userAnswerInput === 'answer1') {
+    inquirer.prompt(questionPrompt[2]).then(function (answers) {
+        if (answers.userAnswerInput === 'generatedQuestionBack') {
             console.log('correct!');
             anotherQuestion();
         } else {
@@ -83,7 +102,7 @@ function pleaseEnter() {
 }
 
 function anotherQuestion() {
-    inquirer.prompt(questionPrompt[2]).then(function(answers) {
+    inquirer.prompt(questionPrompt[3]).then(function(answers) {
         if (answers.another === 'Yes') {
             console.log('OK! Another question!');
             //generateQuestion();
@@ -95,4 +114,4 @@ function anotherQuestion() {
 
 main();
 
-*/
+

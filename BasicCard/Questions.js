@@ -1,4 +1,4 @@
-console.log('Questions loaded!');
+//console.log('Questions loaded!');
 
 module.exports = [
     {
