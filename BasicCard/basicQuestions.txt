@@ -1,0 +1,8 @@
+console.log('basicQuestions loaded!');
+
+exports.questions = [
+    "Who was the first American President?",
+    "George Washington",
+    "Who Launched Sputnik",
+    "Russia"
+    ];
