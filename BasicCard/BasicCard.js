@@ -1,7 +1,7 @@
 
 var fs = require("fs");
 
-var questions = require('./basicQuestions.txt');
+var questions = require('./Questions.txt');
 
 var inquirer = require('inquirer');
 
@@ -31,7 +31,7 @@ var questionPrompt = [
 ]; // end question prompt
 
 function generateQuestion() {
-    fs.read('basicQuestions.txt', 'utf8', function(error, data) {
+    fs.read('Questions.txt', 'utf8', function(error, data) {
         if (error) {
             return console.log(error);
         }
@@ -40,7 +40,7 @@ function generateQuestion() {
 }
 generateQuestion();
 
-
+/*
 function main() {
     whichSide();
 }
@@ -85,5 +85,5 @@ function anotherQuestion() {
 }
 
 main();
-
+*/
 
