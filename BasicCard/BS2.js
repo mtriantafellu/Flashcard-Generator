@@ -2,16 +2,109 @@
 var fs = require("fs");
 
 var questions = require('./Questions.js');
-     //console.log(questions[0].question);
+//console.log(questions[0].question);
 
 var inquirer = require('inquirer');
 
 //three arguments 1. which side, 2. userInput, 3. AnotherQuestion?
 
 
-var generatedQuestionFront = '';
-var generatedQuestionBack = console.log(questions[0].answer);
+var welcome = function() {
 
+    var question = {
+        type: 'list',
+        name: 'welcome',
+        message: 'Welcome to the FlashCard App, would you like to begin with Basic Cards or Cloze Cards?',
+        choices: ['Basic', 'Cloze']
+    }
+
+    inquirer.prompt(question)
+        .then(function (answers) {
+            if (answers.welcome === 'Basic') {
+                console.log('Basic');
+                basic();
+            } else {
+                console.log('Cloze');
+                //cloze();
+            }
+        });
+}
+
+var basic = function() {
+
+    var question = {
+        type: 'list',
+        name: 'basic',
+        message: 'Which side would you like to view?',
+        choices: ['Front', 'Back']
+    }
+
+    inquirer.prompt(question)
+        .then(function (answers) {
+
+            if (answers.basic === 'Front') {
+                generateQuestion();
+
+            } else {
+                generateAnswer();
+            }
+         });
+}
+
+function generateQuestion() {
+    fs.readFile('./Questions.txt', 'utf8', function(error, data) {
+        var generatedQuestionFront = '';
+
+        if (error) {
+            //console.log(error);
+        } else {
+            generatedQuestionFront = console.log(questions[0].question);
+            userInput();
+        }
+    })
+}
+
+function generateAnswer() {
+    fs.readFile('./Questions.txt', 'utf8', function(error, data) {
+        var generatedQuestionBack = '';
+
+        if (error) {
+            //console.log(error);
+        } else {
+            generatedQuestionFront = console.log(questions[0].answer);
+            //generatedQuestionBack = console.log(questions[0].answer);
+            //console.log(questions[0].question)
+        }
+    })
+}
+
+
+var userInput = function() {
+    var inputAnswer = [];
+
+    var input = {
+        type: 'input',
+        name: 'answerInput',
+        message: 'Please input your answer: '
+        validate: generatedQuestionBack
+    }
+
+    inquirer.prompt(userInput)
+        .then(function (answers) {
+
+            if (userInput1 === generatedQuestionBack) {
+                console.log('Correct!');
+            } else {
+                console.log('Incorrect!');
+            }
+
+
+        });
+}
+
+welcome();
+
+/*
 var questionPrompt = [
     {
         type: 'list',
@@ -113,5 +206,4 @@ function anotherQuestion() {
 }
 
 main();
-
-
+    */
