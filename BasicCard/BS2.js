@@ -18,8 +18,7 @@ var welcome = function() {
         choices: ['Basic', 'Cloze']
     }
 
-    inquirer.prompt(question)
-        .then(function (answers) {
+    inquirer.prompt(question).then(function (answers) {
             if (answers.welcome === 'Basic') {
                 console.log('Basic');
                 basic();
@@ -39,8 +38,7 @@ var basic = function() {
         choices: ['Front', 'Back']
     }
 
-    inquirer.prompt(question)
-        .then(function (answers) {
+    inquirer.prompt(question).then(function (answers) {
 
             if (answers.basic === 'Front') {
                 generateQuestion();
@@ -50,35 +48,35 @@ var basic = function() {
             }
          });
 }
-
+var genQuestion = '';
 function generateQuestion() {
     fs.readFile('./Questions.txt', 'utf8', function(error, data) {
-        var generatedQuestionFront = '';
+
 
         if (error) {
             //console.log(error);
         } else {
-            generatedQuestionFront = console.log(questions[0].question);
+            genQuestion = console.log(questions[0].question);
+            userInput();
         }
     })
 
-}userInput();
-
+}
+var genAnswer = '';
 function generateAnswer() {
     fs.readFile('./Questions.txt', 'utf8', function(error, data) {
-        var generatedQuestionBack = '';
+
 
         if (error) {
             //console.log(error);
         } else {
-            generatedQuestionFront = console.log(questions[0].answer);
-            //generatedQuestionBack = console.log(questions[0].answer);
-            //console.log(questions[0].question)
+            genAnswer = console.log(questions[0].answer);
         }
     })
 }
 
 function userInput() {
+
 
     var input = {
 
@@ -86,22 +84,37 @@ function userInput() {
         name: 'answerInput',
         message: 'Please input your answer: ',
         validate: function (value) {
+            var str = value;
+            var pass = str.match(genAnswer);
 
-            inquirer.prompt(input)
-                .then(function(answers) {
-                    console.log('input');
-                    var str = value;
-                    var pass = str.match(/george washington/g);
-
-                    if (pass) {
-                        console.log('correct!');
-                    } else {
-                        console.log('incorrect!');
-                    }
-                });
+            if (pass) {
+                return console.log('correct');
+            } else {
+            console.log('incorrect');
+            }
         }
+
     }
+    inquirer.prompt(input).then(function(value) {
+
+    });
+
 }
+
+
+
+/*
+            var validate = function(value) {
+
+                var str = value;
+                var pass = str.match(genAnswer);
+
+                 if (pass) {
+                     console.log('correct!');
+                     } else {
+                        console.log('incorrect!');
+}
+*/
 
 
 welcome();

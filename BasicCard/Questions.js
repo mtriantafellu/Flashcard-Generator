@@ -3,7 +3,7 @@
 module.exports = [
     {
     question: "Who was the first American President?",
-    answer: "George Washington"
+    answer: "Washington"
     },
     {
     question: "Who Launched Sputnik",
