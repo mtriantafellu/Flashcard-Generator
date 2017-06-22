@@ -46,3 +46,12 @@ This app was designed to provide a flashcard system that could be read through t
     
 - Third option: Cloze.js (in the ClozeCard Folder)
     - This is the same as the above with no option for basic cards.
+    
+# Future Development:
+- Future development ideas include:
+    - Run.js will pull from two separate .js files which house the basic and cloze card functions
+    - Providing more questions and randomizing them.
+
+# Author:
+- Matt Triantafellu
+- UCF Coding BootCamp Summer 2017
