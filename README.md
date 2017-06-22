@@ -5,7 +5,7 @@ Week 6 Homework Thursday Assignment
 The npm modules required for this project are npm 'require' and npm 'inquirer' both have been provided for each application and can be found in the node modules folders.
 
 # Purpose:
-This app was designed to provide a flashcard system that could be read through the command line.  It pulls from either a Questions.js or QuestionsCloze.js file which has questions in it.  There are three essential options
+This app was designed to provide a flashcard system that could be read through the command line.  It pulls from either a Questions.js or QuestionsCloze.js file both of which have questions inside.  There are three essential options
 - First option: Run.js
     - This file includes both the BasicCard and the ClozeCard files in one, its initial prompt asks the user which card system they would like to use
     - After selecting either the BasicCard or the ClozeCard follow the command prompts 
@@ -19,7 +19,7 @@ This app was designed to provide a flashcard system that could be read through t
     - Meaning:
         - It provides the question in close form
         - It provides the option to view the answer
-        - It provides the optoin to view the full text
+        - It provides the option to view the full text
 
 # Usage:
 - First option: Run.js
