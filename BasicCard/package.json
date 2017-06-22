@@ -1,23 +1,15 @@
 {
-  "name": "flashfile",
+  "name": "basicinit",
   "version": "1.0.0",
-  "description": "Week 6 Homework Thursday Assignment",
+  "description": "",
   "main": "BasicCard.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mtriantafellu/Flashcard-Generator.git"
-  },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mtriantafellu/Flashcard-Generator/issues"
-  },
-  "homepage": "https://github.com/mtriantafellu/Flashcard-Generator#readme",
   "dependencies": {
-    "flashcard": "0.0.2",
-    "inquirer": "^3.1.1"
+    "inquirer": "^3.1.1",
+    "require": "^2.4.20"
   }
 }

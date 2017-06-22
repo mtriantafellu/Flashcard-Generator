@@ -1,4 +1,4 @@
-console.log('ClozeQuestions loaded!');
+//console.log('ClozeQuestions loaded!');
 
 module.exports = [
     {

@@ -16,17 +16,17 @@ var welcome = function() {
     var question = {
         type: 'list',
         name: 'welcome',
-        message: 'Welcome to the FlashCard App, would you like to begin with Basic Cards or Cloze Cards?',
-        choices: ['Basic', 'Cloze']
+        message: 'Welcome to the FlashCard App, would you like to begin with Basic Cards?',
+        choices: ['Yes', 'No']
     }
 
     inquirer.prompt(question).then(function (answers) {
-        if (answers.welcome === 'Basic') {
-            console.log('Basic');
+        if (answers.welcome === 'Yes') {
+            console.log('Yes');
             basic();
         } else {
-            console.log('Cloze');
-            cloze();
+            console.log('OK - Try the Cloze Cards!');
+
         }
     });
 }
@@ -47,7 +47,7 @@ var basic = function() {
             generateQuestion();
 
         } else {
-            generateAnswer();
+            showAnswer();
         }
     });
 }
@@ -77,13 +77,25 @@ function generateAnswer() {
     })
 }
 
+function showAnswer() {
+    fs.readFile('./Questions.js', 'utf8', function(error, data) {
+
+        if (error) {
+            console.log(error);
+        } else {
+            genAnswer = questions[0].answer;
+            console.log(genAnswer);
+        }
+    })
+}
+
 function userInput() {
 
     var input = {
 
         type: 'input',
         name: 'answerInput',
-        message: 'Please input your answer: '
+        message: 'Please input your answer (Case Sensitive): '
     }
 
     inquirer.prompt(input).then(function(value) {

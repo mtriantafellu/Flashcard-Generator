@@ -1,16 +1,23 @@
-
 var fs = require("fs");
 
 var questions = require('./Questions.js');
 //console.log(questions[0].question);
+var clozeQuestions = require('./QuestionsCloze.js');
+//console.log(questions[0].question);
 
 var inquirer = require('inquirer');
 
-//three arguments 1. which side, 2. userInput, 3. AnotherQuestion?
-
+// Three arguments 1. which side, 2. userInput, 3. AnotherQuestion?
+// For Basic:
 var genQuestion = '';
 var genAnswer = '';
 var answer = '';
+
+// For Cloze:
+var genClozeQuestion = '';
+var genClozeAnswer = '';
+var clozeAnswer = '';
+var genfullText = '';
 
 var welcome = function() {
 
@@ -27,7 +34,7 @@ var welcome = function() {
             basic();
         } else {
             console.log('Cloze');
-            cloze();
+            clozeWelcome();
         }
     });
 }
@@ -48,13 +55,13 @@ var basic = function() {
             generateQuestion();
 
         } else {
-            generateAnswer();
+            showAnswer();
         }
     });
 }
 
 function generateQuestion() {
-    fs.readFile('./Questions.txt', 'utf8', function(error, data) {
+    fs.readFile('./Questions.js', 'utf8', function(error, data) {
 
 
         if (error) {
@@ -68,12 +75,24 @@ function generateQuestion() {
 }
 
 function generateAnswer() {
-    fs.readFile('./Questions.txt', 'utf8', function(error, data) {
+    fs.readFile('./Questions.js', 'utf8', function(error, data) {
 
         if (error) {
             console.log(error);
         } else {
             genAnswer = questions[0].answer;
+        }
+    })
+}
+
+function showAnswer() {
+    fs.readFile('./Questions.js', 'utf8', function(error, data) {
+
+        if (error) {
+            console.log(error);
+        } else {
+            genAnswer = questions[0].answer;
+            console.log(genAnswer);
         }
     })
 }
@@ -84,7 +103,7 @@ function userInput() {
 
         type: 'input',
         name: 'answerInput',
-        message: 'Please input your answer: '
+        message: 'Please input your answer (Case Sensitive): '
     }
 
     inquirer.prompt(input).then(function(value) {
@@ -129,210 +148,73 @@ function anotherQuestion() {
 }
 
 function tryAgain() {
+
     var again = {
         type: 'list',
-        name: 'again',
-        message: 'Would you like to try again?',
+        name: 'tryAgain',
+        message: 'Would you like to Try Again?',
         choices: ['Yes', 'No']
     }
     inquirer.prompt(again).then(function(answers) {
         if (answers.tryAgain === 'Yes') {
-            console.log('OK Another Question!');
+            console.log('OK! Try Again!');
+            userInput();
         } else {
-            console.log('OK! Cya!');
+            console.log('OK! Dont Try Again!');
         }
     });
 }
 
-welcome();
+//=========== End Basic =============
 
+//=========== Start Cloze =============
 
-
-
-
-
-var fs = require("fs");
-
-var questions = require('./Questions.js');
-//console.log(questions[0].question);
-
-var clozeQuestions = require('./ClozeQuestions.js');
-//console.log(questions[0].question);
-
-var inquirer = require('inquirer');
-
-//three arguments 1. which side, 2. userInput, 3. AnotherQuestion?
-
-var genQuestion = '';
-var genAnswer = '';
-var genClozeQuestion = '';
-var genClozeAnswer = '';
-var answer = '';
-
-var welcome = function() {
+var clozeWelcome = function() {
 
     var question = {
         type: 'list',
         name: 'welcome',
-        message: 'Welcome to the FlashCard App, would you like to begin with Basic Cards or Cloze Cards?',
-        choices: ['Basic', 'Cloze']
+        message: 'Welcome to the FlashCard App, would you like to View a Cloze Card??',
+        choices: ['Yes', 'No']
     }
 
     inquirer.prompt(question).then(function (answers) {
-            if (answers.welcome === 'Basic') {
-                console.log('Basic');
-                basic();
-            } else {
-                console.log('Cloze');
-                cloze();
-            }
-        });
-}
-
-//BASIC FUNCTION
-var basic = function() {
-
-    var question = {
-        type: 'list',
-        name: 'basic',
-        message: 'Which side would you like to view?',
-        choices: ['Front', 'Back']
-    }
-
-    inquirer.prompt(question).then(function (answers) {
-
-            if (answers.basic === 'Front') {
-                generateQuestion();
-
-            } else {
-                generateAnswer();
-            }
-         });
-}
-
-function generateQuestion() {
-    fs.readFile('./Questions.txt', 'utf8', function(error, data) {
-
-
-        if (error) {
-            console.log(error);
+        if (answers.welcome === 'Yes') {
+            console.log('Yes');
+            cloze();
         } else {
-            genQuestion = console.log(questions[0].question);
-            userInput();
-        }
-    })
-
-}
-
-function generateAnswer() {
-    fs.readFile('./Questions.txt', 'utf8', function(error, data) {
-
-        if (error) {
-            console.log(error);
-        } else {
-            genAnswer = questions[0].answer;
-        }
-    })
-}
-
-function userInput() {
-
-    var input = {
-
-        type: 'input',
-        name: 'answerInput',
-        message: 'Please input your answer: '
-    }
-
-    inquirer.prompt(input).then(function(value) {
-        answer = value.answerInput;
-        //console.log('value', value);
-        //console.log('answer', answer);
-        //console.log(answer.answerInput);
-        //console.log(value.answerInput);
-        generateAnswer();
-        verify();
-    });
-    //generateAnswer();
-}
-
-function verify() {
-    //generateAnswer();
-    //console.log('genAnswer', genAnswer);
-    if (answer == genAnswer) {
-        console.log('correct!')
-        anotherQuestion();
-    } else {
-        console.log('incorrect!');
-        tryAgain();
-    }
-}
-
-function anotherQuestion() {
-
-    var another = {
-        type: 'list',
-        name: 'anotherQuestion',
-        message: 'Would you like another question?',
-        choices: ['Yes', 'No']
-    }
-    inquirer.prompt(another).then(function(answers) {
-        if (answers.another === 'Yes') {
-            console.log('OK! Another question!');
-        } else {
-            console.log('OK! Cya!');
+            console.log('No');
+            console.log('OK - Try the basic.js');
         }
     });
 }
 
-function tryAgain() {
-    var again = {
-        type: 'list',
-        name: 'again',
-        message: 'Would you like to try again?',
-        choices: ['Yes', 'No']
-    }
-    inquirer.prompt(again).then(function(answers) {
-        if (answers.again === 'Yes') {
-            userInput();
-        } else {
-            console.log('OK! Cya!');
-        }
-    });
-}
-
-welcome();
-
-
-//=============== CLOZE FUNCTION ==============
-
-
-
-
-
-var cloze = function() {
+//CLOZE FUNCTION
+var clozeWelcome = function() {
 
     var question = {
         type: 'list',
         name: 'cloze',
-        message: 'Would you like a clozed question?',
-        choices: ['Yes', 'No']
+        message: 'Would you like to see a question?  The Answer? Or the Full Text?',
+        choices: ['Question', 'Answer', 'FullText']
     }
 
     inquirer.prompt(question).then(function (answers) {
 
-        if (answers.cloze === 'Yes') {
+        if (answers.cloze === 'Question') {
             generateClozeQuestion();
 
-        } else {
-            generateClozeAnswer();
+        } else if (answers.cloze === 'Answer') {
+            showClozeAnswer();
+
+        } else if (answers.cloze === 'FullText') {
+            showFullText();
         }
     });
 }
 
 function generateClozeQuestion() {
-    fs.readFile('./ClozeQuestions.js', 'utf8', function(error, data) {
-
+    fs.readFile('./QuestionsCloze.js', 'utf8', function(error, data) {
 
         if (error) {
             console.log(error);
@@ -341,16 +223,40 @@ function generateClozeQuestion() {
             userClozeInput();
         }
     })
-
 }
 
 function generateClozeAnswer() {
-    fs.readFile('./ClozeQuestions.txt', 'utf8', function(error, data) {
+    fs.readFile('./QuestionsCloze.js', 'utf8', function(error, data) {
 
         if (error) {
             console.log(error);
         } else {
             genClozeAnswer = clozeQuestions[0].answer;
+
+        }
+    })
+}
+
+function showClozeAnswer() {
+    fs.readFile('./QuestionsCloze.js', 'utf8', function(error, data) {
+
+        if (error) {
+            console.log(error);
+        } else {
+            genClozeAnswer = clozeQuestions[0].answer;
+            console.log('The Answer is: ', genClozeAnswer);
+        }
+    })
+}
+
+function showFullText() {
+    fs.readFile('./QuestionsCloze.js', 'utf8', function(error, data) {
+
+        if (error) {
+            console.log(error);
+        } else {
+            genFullText = clozeQuestions[0].fullText;
+            console.log('The Full Text is: ', genFullText);
         }
     })
 }
@@ -365,21 +271,21 @@ function userClozeInput() {
     }
 
     inquirer.prompt(input).then(function(value) {
-        answer = value.answerInput;
+        clozeAnswer = value.answerInput;
         //console.log('value', value);
         //console.log('answer', answer);
         //console.log(answer.answerInput);
         //console.log(value.answerInput);
-        generateClozeAnswer();
+        //generateAnswer();
         verifyCloze();
     });
-    //generateAnswer();
+    generateClozeAnswer();
 }
 
 function verifyCloze() {
     //generateAnswer();
     //console.log('genAnswer', genAnswer);
-    if (answer == genClozeAnswer) {
+    if (clozeAnswer == genClozeAnswer) {
         console.log('correct!')
         anotherClozeQuestion();
     } else {
@@ -392,12 +298,12 @@ function anotherClozeQuestion() {
 
     var another = {
         type: 'list',
-        name: 'anotherQuestion',
+        name: 'anotherClozeQuestion',
         message: 'Would you like another question?',
         choices: ['Yes', 'No']
     }
     inquirer.prompt(another).then(function(answers) {
-        if (answers.another === 'Yes') {
+        if (answers.anotherClozeQuestion === 'Yes') {
             console.log('OK! Another question!');
         } else {
             console.log('OK! Cya!');
@@ -406,17 +312,19 @@ function anotherClozeQuestion() {
 }
 
 function tryClozeAgain() {
+
     var again = {
         type: 'list',
-        name: 'again',
-        message: 'Would you like to try again?',
+        name: 'tryClozeAgain',
+        message: 'Would you like to Try Again?',
         choices: ['Yes', 'No']
     }
     inquirer.prompt(again).then(function(answers) {
-        if (answers.again === 'Yes') {
+        if (answers.tryClozeAgain === 'Yes') {
+            console.log('OK! Try Again!');
             userClozeInput();
         } else {
-            console.log('OK! Cya!');
+            console.log('OK! Dont Try Again!');
         }
     });
 }
