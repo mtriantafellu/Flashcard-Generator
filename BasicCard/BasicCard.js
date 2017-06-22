@@ -1,117 +1,148 @@
-
 var fs = require("fs");
 
 var questions = require('./Questions.js');
-     //console.log(questions[0].question);
+//console.log(questions[0].question);
 
 var inquirer = require('inquirer');
 
 //three arguments 1. which side, 2. userInput, 3. AnotherQuestion?
 
+var genQuestion = '';
+var genAnswer = '';
+var answer = '';
 
-var generatedQuestionFront = '';
-var generatedQuestionBack = console.log(questions[0].answer);
+var welcome = function() {
 
-var questionPrompt = [
-    {
+    var question = {
         type: 'list',
         name: 'welcome',
         message: 'Welcome to the FlashCard App, would you like to begin with Basic Cards or Cloze Cards?',
         choices: ['Basic', 'Cloze']
-    },
-    {
-        type: 'list',
-        name: 'side',
-        message: 'Please see question below:',
-        choices: ['Front', 'Back']
-    },
-    {
-        type: 'input',
-        name: 'userAnswerInput',
-        message: "Question: ",
-        //choices: [generatedQuestionBack],
-        filter: function(val) {
-            return val.toLowerCase();
-        }
-    },
-    {
-        type: 'list',
-        name: 'another',
-        message: 'Would you like another question?',
-        choices: ['Yes', 'No']
     }
-]; // end question prompt
 
-
-function main() {
-    welcome();
-}
-
-function welcome() {
-    inquirer.prompt(questionPrompt[0]).then(function (answers) {
+    inquirer.prompt(question).then(function (answers) {
         if (answers.welcome === 'Basic') {
-            console.log('Front');
-            whichSide();
-        } else if (answers.side === 'Back') {
-            console.log('Back');
-            whichSide();
+            console.log('Basic');
+            basic();
+        } else {
+            console.log('Cloze');
+            cloze();
         }
     });
 }
 
+//BASIC FUNCTION
+var basic = function() {
 
-//function to generate the question pulling from Questions.js file
+    var question = {
+        type: 'list',
+        name: 'basic',
+        message: 'Which side would you like to view?',
+        choices: ['Front', 'Back']
+    }
+
+    inquirer.prompt(question).then(function (answers) {
+
+        if (answers.basic === 'Front') {
+            generateQuestion();
+
+        } else {
+            generateAnswer();
+        }
+    });
+}
+
 function generateQuestion() {
-    fs.readFile('./Questions.txt', 'utf8', function(error, data) {
+    fs.readFile('./Questions.js', 'utf8', function(error, data) {
+
+
         if (error) {
             console.log(error);
         } else {
-            generatedQuestionFront = console.log(questions[0].question);
-            //generatedQuestionBack = console.log(questions[0].answer);
-            //console.log(questions[0].question)
+            genQuestion = console.log(questions[0].question);
+            userInput();
+        }
+    })
+
+}
+
+function generateAnswer() {
+    fs.readFile('./Questions.js', 'utf8', function(error, data) {
+
+        if (error) {
+            console.log(error);
+        } else {
+            genAnswer = questions[0].answer;
         }
     })
 }
 
-function whichSide() {
-    inquirer.prompt(questionPrompt[1]).then(function (answers) {
-        if (answers.side === 'Front') {
-            generateQuestion();
-            //console.log(generatedQuestionFront);
-            pleaseEnter();
+function userInput() {
 
+    var input = {
+
+        type: 'input',
+        name: 'answerInput',
+        message: 'Please input your answer: '
+    }
+
+    inquirer.prompt(input).then(function(value) {
+        answer = value.answerInput;
+        //console.log('value', value);
+        //console.log('answer', answer);
+        //console.log(answer.answerInput);
+        //console.log(value.answerInput);
+        //generateAnswer();
+        verify();
+    });
+    generateAnswer();
+}
+
+function verify() {
+    //generateAnswer();
+    //console.log('genAnswer', genAnswer);
+    if (answer == genAnswer) {
+        console.log('correct!')
+        anotherQuestion();
+    } else {
+        console.log('incorrect!');
+        tryAgain();
+    }
+}
+
+function anotherQuestion() {
+
+    var another = {
+        type: 'list',
+        name: 'anotherQuestion',
+        message: 'Would you like another question?',
+        choices: ['Yes', 'No']
+    }
+    inquirer.prompt(another).then(function(answers) {
+        if (answers.anotherQuestion === 'Yes') {
+            console.log('OK! Another question!');
         } else {
-            generateQuestion();
-            //console.log(generatedQuestionBack);
-            pleaseEnter();
+            console.log('OK! Cya!');
         }
     });
 }
 
+function tryAgain() {
 
-function pleaseEnter() {
-    inquirer.prompt(questionPrompt[2]).then(function (answers) {
-        if (answers.userAnswerInput === 'generatedQuestionBack') {
-            console.log('correct!');
-            anotherQuestion();
+    var again = {
+        type: 'list',
+        name: 'tryAgain',
+        message: 'Would you like to Try Again?',
+        choices: ['Yes', 'No']
+    }
+    inquirer.prompt(again).then(function(answers) {
+        if (answers.tryAgain === 'Yes') {
+            console.log('OK! Try Again!');
+            userInput();
         } else {
-            console.log('incorrect');
-            anotherQuestion();
+            console.log('OK! Dont Try Again!');
         }
-    })
+    });
 }
 
-function anotherQuestion() {
-    inquirer.prompt(questionPrompt[3]).then(function(answers) {
-        if (answers.another === 'Yes') {
-            console.log('OK! Another question!');
-            //generateQuestion();
-        } else {
-            console.log('OK! Cya!');
-        }
-    })
-}
-
-main();
-
-
+welcome();
