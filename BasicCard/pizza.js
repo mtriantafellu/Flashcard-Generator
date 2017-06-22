@@ -1,29 +1,41 @@
 /**
- * Password prompt example
+ * Input prompt example
  */
 
 'use strict';
-const inquirer = require('inquirer');
+var inquirer = require('inquirer');
 
-const requireLetterAndNumber = value => {
-    if (/\w/.test(value) && /\d/.test(value)) {
-        return true;
-    }
-    return 'Password need to have at least a letter and a number';
-};
-
-inquirer.prompt([
+var questions = [
     {
-        type: 'password',
-        message: 'Enter a password',
-        name: 'password1',
-        validate: requireLetterAndNumber
+        type: 'input',
+        name: 'first_name',
+        message: 'What\'s your first name'
     },
     {
-        type: 'password',
-        message: 'Enter a masked password',
-        name: 'password2',
-        mask: '*',
-        validate: requireLetterAndNumber
+        type: 'input',
+        name: 'last_name',
+        message: 'What\'s your last name',
+        default: function () {
+            return 'Doe';
+        }
+    },
+    {
+        type: 'input',
+        name: 'phone',
+        message: 'What\'s your phone number',
+        validate: function (value) {
+            var str = value;
+            var pass = str.match(/george washington/g);
+            if (pass) {
+                return true;
+            }
+
+            return 'Please enter a valid phone number';
+        }
     }
-]).then(answers => console.log(JSON.stringify(answers, null, '  ')));
+];
+
+inquirer.prompt(questions).then(function (answers) {
+    console.log(JSON.stringify(answers, null, '  '));
+
+});

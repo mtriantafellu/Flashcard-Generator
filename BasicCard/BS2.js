@@ -59,10 +59,10 @@ function generateQuestion() {
             //console.log(error);
         } else {
             generatedQuestionFront = console.log(questions[0].question);
-            userInput();
         }
     })
-}
+
+}userInput();
 
 function generateAnswer() {
     fs.readFile('./Questions.txt', 'utf8', function(error, data) {
@@ -78,29 +78,31 @@ function generateAnswer() {
     })
 }
 
-
-var userInput = function() {
-    var inputAnswer = [];
+function userInput() {
 
     var input = {
+
         type: 'input',
         name: 'answerInput',
-        message: 'Please input your answer: '
-        validate: generatedQuestionBack
+        message: 'Please input your answer: ',
+        validate: function (value) {
+
+            inquirer.prompt(input)
+                .then(function(answers) {
+                    console.log('input');
+                    var str = value;
+                    var pass = str.match(/george washington/g);
+
+                    if (pass) {
+                        console.log('correct!');
+                    } else {
+                        console.log('incorrect!');
+                    }
+                });
+        }
     }
-
-    inquirer.prompt(userInput)
-        .then(function (answers) {
-
-            if (userInput1 === generatedQuestionBack) {
-                console.log('Correct!');
-            } else {
-                console.log('Incorrect!');
-            }
-
-
-        });
 }
+
 
 welcome();
 
